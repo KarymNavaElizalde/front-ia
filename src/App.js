@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { Login, Signup, Getstarted } from "./pages"
+import { ProtectedRoute } from "./pages/components";
+import { Home } from "./Home";
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from "react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+  useEffect(()=>{
+    getToken()
+  },[])
+
+
+const getToken = ()=> {
+    const token = localStorage.getItem("sesionToken")
+    return token
 }
 
-export default App;
+
+  return (
+    <BrowserRouter>
+            <Routes>
+                <Route path='/home' element={ <Home /> } />
+                <Route path='/signup' element={ <Signup /> } />
+                <Route path='/login' element={ <Login /> } />
+
+                <Route element={<ProtectedRoute  getToken={getToken} />} >
+                    <Route path='/getstarted' element={ <Getstarted /> } />
+                </Route> 
+            </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default App
+
+
+
